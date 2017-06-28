@@ -55,6 +55,8 @@
       }
       leftMostTileIndex = leftMostTileIndex % tiles.length
 
+      tiles.sort(function(a,b) {return (a.pto < b.pto) ? 1 : ((b.pto > a.pto) ? -1 : 0);} );
+
       // Draw
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       var x = leftEdge;
