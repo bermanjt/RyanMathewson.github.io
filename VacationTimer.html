@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Vacation Timer</title>
+  <style>
+    html, body, canvas {
+      width: 100%;
+      height: 100%;
+      margin: 0px;
+      padding: 0px;
+    }
+  </style>
+  <meta http-equiv="refresh" content="600" >
+</head>
+<body>
+  <script>
+
+    // canvas setup
+    var canvas = document.createElement('canvas');
+    canvas.id = "canvas";
+    document.body.appendChild(canvas);
+    var ctx = canvas.getContext("2d");
+
+    // settings
+    var scrollSpeed = 0.1; // px per ms
+    var tileWidth = 500;
+    var tileHeight = 100;
+    var tiles = [];
+    
+    tiles.push(new Employee("Ryan Mathewson","black","#FFCD00",281.5,new Date("2017-06-23"),19));
+    tiles.push(new Employee("John Gettel","#756bb1","#d95f0e",152.5500,new Date("2017-06-18"),24));
+    tiles.push(new Employee("Jason Farlow","black","green",65.74,new Date("2017-06-18"),19));
+    tiles.push(new Employee("Co-ops","black","white",0,new Date("2017-06-23"),0));
+
+    // working variables
+    var leftEdge = 0;
+    var lastDrawTime = Date.now();
+    var leftMostTileIndex = 0;
+
+    function Draw() {
+
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      var msSincelastDrawTime = Date.now() - lastDrawTime;
+      var delta = scrollSpeed * msSincelastDrawTime;
+      leftEdge -= delta;
+
+      while(leftEdge < -tileWidth){
+        leftEdge += tileWidth;
+        leftMostTileIndex++;
+      }
+      leftMostTileIndex = leftMostTileIndex % tiles.length
+
+      // Draw
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      var x = leftEdge;
+      var i = leftMostTileIndex;
+      while(x < (canvas.width + tileWidth)){
+        if(i >= tiles.length)
+          i = 0;
+  
+        var tile = tiles[i];
+        ctx.fillStyle = tile.background;
+        ctx.fillRect(x, 0, tileWidth, tileHeight);
+        ctx.font = "40px Arial";
+        ctx.fillStyle = tile.foreground;
+        ctx.fillText(tile.name, x, 40);
+        var yearsSinceStart  = ((Date.now() - tile.startdate) / 1000.0 / 60.0 / 60.0 / 24.0 / 365.0);
+        var pto = tile.pto + (yearsSinceStart * tile.rate);
+        ctx.fillText(pto.toFixed(7), x, 80);
+        x += tileWidth;
+        i++;
+      }
+    
+      
+      lastDrawTime = Date.now();
+      requestAnimationFrame(Draw);
+    }
+
+    requestAnimationFrame(Draw);
+
+
+    function Employee(name, background, foreground, pto, startdate, rate) {
+      this.name = name;
+      this.background = background;
+      this.foreground = foreground;
+      this.pto = pto;
+      this.startdate = startdate;
+      this.rate = rate;
+    }
+
+  </script>
+</body>
+</html>
