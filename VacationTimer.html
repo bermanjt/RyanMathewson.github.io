@@ -29,7 +29,7 @@
       overflow: hidden;
     }
   </style>
-  <meta http-equiv="refresh" content="600">
+  <meta http-equiv="refresh" content="1200">
 </head>
 <body>
   <script>
@@ -50,7 +50,7 @@
     tiles.push(new Employee("Andy Knapp",     "black",    "green",    284.13,   new Date("2017-07-2"),   24));
     tiles.push(new Employee("Co-ops",         "black",    "white",    0,        new Date("2017-06-23"),   0));
 
-    var sitesToRotate = ["https://systemssupport.leidos.com/"];
+    var sitesToRotate = ["https://systemssupport.leidos.com/","https://systemssupport.leidos.com/CalendarPage.aspx","http://quotes.wsj.com/LDOS"];
 
     // working variables
     var leftEdge = 0;
@@ -80,13 +80,13 @@
       canvas.height = tileHeight;
 
 
-      // if(now - lastSiteRotation > 1000 * 10){
-      //   siteRotationIndex++;
-      //   if(siteRotationIndex >= sitesToRotate.length)
-      //     siteRotationIndex = 0;
-      //   lastSiteRotation = now;
-      //   iframe.src = sitesToRotate[siteRotationIndex];
-      // }
+      if(now - lastSiteRotation > 1000 * 60){
+        siteRotationIndex++;
+        if(siteRotationIndex >= sitesToRotate.length)
+          siteRotationIndex = 0;
+        lastSiteRotation = now;
+        iframe.src = sitesToRotate[siteRotationIndex];
+      }
 
 
       var msSincelastDrawTime = Date.now() - lastDrawTime;
