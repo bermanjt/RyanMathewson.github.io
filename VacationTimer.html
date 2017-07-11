@@ -4,7 +4,23 @@
   <meta charset="utf-8" />
   <title>Vacation Timer</title>
   <style>
-    html, body, canvas {
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0px;
+      padding: 0px;
+      background: black;
+      overflow: hidden;
+    }
+    canvas{
+      width: 100%;
+      height: 200px;
+      margin: 0px;
+      padding: 0px;
+      background: black;
+      overflow: hidden;
+    }
+    iframe{
       width: 100%;
       height: 100%;
       margin: 0px;
@@ -17,13 +33,6 @@
 </head>
 <body>
   <script>
-
-    // canvas setup
-    var canvas = document.createElement('canvas');
-    canvas.id = "canvas";
-    document.body.appendChild(canvas);
-    var ctx = canvas.getContext("2d");
-
     // settings
     var scrollSpeed = 0.1; // px per ms
     var tileWidth = 800;
@@ -41,15 +50,44 @@
     tiles.push(new Employee("Andy Knapp",     "black",    "green",    284.13,   new Date("2017-07-2"),   24));
     tiles.push(new Employee("Co-ops",         "black",    "white",    0,        new Date("2017-06-23"),   0));
 
+    var sitesToRotate = ["https://systemssupport.leidos.com/"];
+
     // working variables
     var leftEdge = 0;
     var lastDrawTime = Date.now();
     var leftMostTileIndex = 0;
+    var lastSiteRotation = new Date();
+    var siteRotationIndex = 0;
+
+
+    // canvas setup
+    var canvas = document.createElement('canvas');
+    canvas.id = "canvas";
+    document.body.appendChild(canvas);
+    var ctx = canvas.getContext("2d");
+
+    // iFrame setup
+    var iframe = document.createElement('iframe');
+    document.body.appendChild(iframe);
+    iframe.src = sitesToRotate[siteRotationIndex];
 
     function Draw() {
 
+      var now = new Date();
+
       canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      //canvas.height = window.innerHeight;
+      canvas.height = tileHeight;
+
+
+      // if(now - lastSiteRotation > 1000 * 10){
+      //   siteRotationIndex++;
+      //   if(siteRotationIndex >= sitesToRotate.length)
+      //     siteRotationIndex = 0;
+      //   lastSiteRotation = now;
+      //   iframe.src = sitesToRotate[siteRotationIndex];
+      // }
+
 
       var msSincelastDrawTime = Date.now() - lastDrawTime;
       var delta = scrollSpeed * msSincelastDrawTime;
@@ -89,6 +127,11 @@
         x += tileWidth;
         i++;
       }
+
+
+      // ctx.font = "90px Arial";
+      // ctx.fillStyle = "white";
+      // ctx.fillText(now.toLocaleString(), 0, 800);
 
 
       lastDrawTime = Date.now();
