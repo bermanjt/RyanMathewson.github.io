@@ -34,6 +34,10 @@
 </head>
 <body>
   <script>
+
+
+
+
     // settings
     var scrollSpeed = 0.2; // px per ms
     var tileWidth = 800;
@@ -52,7 +56,7 @@
     tiles.push(new Employee("Kevin Chaney",   "Turquoise","black",    17, 9.32,     new Date("2017-07-14")));
     tiles.push(new Employee("Michelle",       "pink",     "gray",     24, 81.2400,  new Date("2017-07-07")));
     tiles.push(new Employee("Mike Legg",      "red",      "white",    24, 239.57,   new Date("2017-07-05")));
-    tiles.push(new Employee("Ryan Mathewson", "black",    "#FFCD00",  19, 184.95  , new Date("2016-12-26")));
+    tiles.push(new Employee("Ryan Mathewson", "black",    nyan,       19, 184.95  , new Date("2016-12-26")));
     tiles.push(new Employee("Scott Lawless",  "#92278F",  "#FFFFFF",  24, 403.0300, new Date("2017-07-28")));
     tiles.push(new Employee("Taylor Osmonson","black",    "orange",   19, 16.79,    new Date("2017-07-16")));
     
@@ -119,10 +123,10 @@
           i = 0;
 
         var tile = tiles[i];
-        ctx.fillStyle = tile.background;
+        ctx.fillStyle = tile.getBackgroundColor();
         ctx.fillRect(x, 0, tileWidth, tileHeight);
         ctx.font = "90px Arial";
-        ctx.fillStyle = tile.foreground;
+        ctx.fillStyle = tile.getForegroundColor();
         ctx.fillText(tile.name, x + textMargin, 80);
         var yearsSinceStart = ((Date.now() - tile.startdate) / 1000.0 / 60.0 / 60.0 / 24.0 / 365.0);
         var hours = tile.currentPTOHours();
@@ -163,7 +167,41 @@
         return this.pto + (yearsSinceStart * this.rate * 8);
       }
 
+      this.getBackgroundColor = function(){
+        if (typeof background === "function")
+          return background();
+        else
+          return background;
+      }
+
+      this.getForegroundColor = function(){
+        if (typeof foreground === "function")
+          return foreground();
+        else
+          return foreground;
+      }
+
+ 
     }
+
+    function RGB2Color(r,g,b) {
+      return '#' + byte2Hex(r) + byte2Hex(g) + byte2Hex(b);
+    }
+
+    function byte2Hex(n){
+      var nybHexString = "0123456789ABCDEF";
+      return String(nybHexString.substr((n >> 4) & 0x0F,1)) + nybHexString.substr(n & 0x0F,1);
+    }
+
+    function nyan(){
+      var now = new Date();
+      var frequency = 0.001;
+      red   = Math.sin(frequency*now + 0) * 127 + 128;
+      green = Math.sin(frequency*now + 2) * 127 + 128;
+      blue  = Math.sin(frequency*now + 4) * 127 + 128;
+      return RGB2Color(red,green,blue);
+    }
+
 
   </script>
 </body>
