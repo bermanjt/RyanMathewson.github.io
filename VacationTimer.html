@@ -51,7 +51,7 @@
     tiles.push(new Employee("Derek Lauer",    "gray",     "blue",     16, -56.1,    new Date("2016-12-26")));
     tiles.push(new Employee("Jason Farlow",   "black",    "green",    19, 65.74,    new Date("2017-06-18")));
     tiles.push(new Employee("Jason Hotra",    "#18453B",  "white",    24, 231.0700, new Date("2017-07-02")));
-    tiles.push(new Employee("John Gettel",    "black",    "#FF00FF",  24, 143.93,   new Date("2017-07-02")));
+    tiles.push(new Employee("John L. Gettel", "black",    "#0FF0FF",  24, 32.61,    new Date("2016-12-26")));
     tiles.push(new Employee("Ken T",          "grey",     "black",    24, 305.68,   new Date("2017-07-21")));
     tiles.push(new Employee("Kevin Chaney",   "Turquoise","black",    17, 9.32,     new Date("2017-07-14")));
     tiles.push(new Employee("Michelle",       "pink",     "gray",     24, 81.2400,  new Date("2017-07-07")));
@@ -89,9 +89,7 @@
       var now = new Date();
 
       canvas.width = window.innerWidth;
-      //canvas.height = window.innerHeight;
       canvas.height = tileHeight;
-
 
       if(now - lastSiteRotation > 1000 * 60){
         siteRotationIndex++;
@@ -133,18 +131,12 @@
         var minutes = (hours % 1) * 60.0;
         var seconds = (minutes % 1) * 60.0;
         var milliseconds = (seconds % 1) * 1000;
-        //ctx.fillText(hours.toFixed(7), x + textMargin, 180);
         ctx.fillText(Math.floor(hours) + ":" + ("00" + Math.floor(minutes)).substr(-2, 2) + ":" + ("00" + Math.floor(seconds)).substr(-2, 2) + "." + ("000" + Math.floor(milliseconds)).substr(-3, 3), x + textMargin, 180);
 
 
         x += tileWidth;
         i++;
       }
-
-
-      // ctx.font = "90px Arial";
-      // ctx.fillStyle = "white";
-      // ctx.fillText(now.toLocaleString(), 0, 800);
 
 
       lastDrawTime = Date.now();
