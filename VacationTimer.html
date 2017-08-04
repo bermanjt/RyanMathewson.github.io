@@ -43,7 +43,7 @@
 
     tiles.push(new Employee("Andrew Hoyt",    "#333f4f",  "#ffff00",  19, 11.92,    new Date("2016-12-26")));
     tiles.push(new Employee("Andy Knapp",     "black",    "green",    24, 284.13,   new Date("2017-07-02")));
-    tiles.push(new Employee("Chris Mikola",   "#8E44AD",  "white",    24, 115.74,   new Date("2017-07-03")));
+    tiles.push(new Employee("Chris Mikola",   "#8E44AD",  "white",    24, -13.96,   new Date("2016-12-26")));
     tiles.push(new Employee("Derek Lauer",    "gray",     "blue",     16, -56.1,    new Date("2016-12-26")));
     tiles.push(new Employee("Jason Farlow",   "black",    "green",    19, 65.74,    new Date("2017-06-18")));
     tiles.push(new Employee("Jason Hotra",    "#18453B",  "white",    24, 231.0700, new Date("2017-07-02")));
@@ -162,6 +162,7 @@
         var yearsSinceStart = ((Date.now() - this.startdate) / 1000.0 / 60.0 / 60.0 / 24.0 / 365.0);
         return this.pto + (yearsSinceStart * this.rate * 8);
       }
+
     }
 
   </script>
