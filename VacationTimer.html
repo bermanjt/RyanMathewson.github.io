@@ -4,7 +4,10 @@
   <meta charset="utf-8" />
   <title>Vacation Timer</title>
   <style>
-    * {cursor: none;}
+    * {
+      cursor: none;
+    }
+
     html, body {
       width: 100%;
       height: 100%;
@@ -13,7 +16,8 @@
       background: white;
       overflow: hidden;
     }
-    canvas{
+
+    canvas {
       width: 100%;
       height: 200px;
       margin: 0px;
@@ -21,7 +25,8 @@
       background: white;
       overflow: hidden;
     }
-    iframe{
+
+    iframe {
       width: 100%;
       height: 100%;
       margin: 0px;
@@ -45,25 +50,25 @@
     var textMargin = 5;
     var tiles = [];
 
-    tiles.push(new Employee("Andrew Hoyt",    "#333f4f",  "#ffff00",  19, 11.92,    new Date("2016-12-26")));
-    tiles.push(new Employee("Andy Knapp",     "black",    "green",    24, 284.13,   new Date("2017-07-02")));
-    tiles.push(new Employee("Chris Mikola",   "#8E44AD",  "white",    24, -13.96,   new Date("2016-12-26")));
-    tiles.push(new Employee("Derek Lauer",    "gray",     "blue",     16, -56.1,    new Date("2016-12-26")));
-    tiles.push(new Employee("Jason Farlow",   "black",    "green",    19, 65.74,    new Date("2017-06-18")));
-    tiles.push(new Employee("Jason Hotra",    "#18453B",  "white",    24, 231.0700, new Date("2017-07-02")));
-    tiles.push(new Employee("John L. Gettel", "black",    "#00FFFF",  24, 32.61,    new Date("2016-12-26")));
-    tiles.push(new Employee("Ken T",          "grey",     "black",    24, 305.68,   new Date("2017-07-21")));
-    tiles.push(new Employee("Kevin Chaney",   "Turquoise","black",    17, -63.9,    new Date("2016-12-26")));
-    tiles.push(new Employee("Michelle",       "pink",     "gray",     24, 81.2400,  new Date("2017-07-07")));
-    tiles.push(new Employee("Mike Legg",      "red",      "white",    24, 239.57,   new Date("2017-07-05")));
-    tiles.push(new Employee("Ryan Mathewson", "black",    nyan,       19, 184.95  , new Date("2016-12-26")));
-    tiles.push(new Employee("Scott Lawless",  "#92278F",  "#FFFFFF",  24, 403.0300, new Date("2017-07-28")));
-    tiles.push(new Employee("Taylor Osmonson","black",    "orange",   19, 16.79,    new Date("2017-07-16")));
-    
-    tiles.push(new Employee("Co-ops",         "black",    "white",     0, 0,        new Date("2017-06-23")));
+    tiles.push(new Employee("Andrew Hoyt", "#333f4f", "#ffff00", 19, 11.92, new Date("2016-12-26"), new Date("2017-08-04")));
+    tiles.push(new Employee("Andy Knapp", "black", "green", 24, 284.13, new Date("2017-07-02"), new Date("2017-08-04")));
+    tiles.push(new Employee("Chris Mikola", "#8E44AD", "white", 24, -13.96, new Date("2016-12-26"), new Date("2017-08-04")));
+    tiles.push(new Employee("Derek Lauer", "gray", "blue", 16, -56.1, new Date("2016-12-26"), new Date("2017-08-04")));
+    tiles.push(new Employee("Jason Farlow", "black", "green", 19, 65.74, new Date("2017-06-18"), new Date("2017-08-04")));
+    tiles.push(new Employee("Jason Hotra", "#18453B", "white", 24, 231.0700, new Date("2017-07-02"), new Date("2017-08-04")));
+    tiles.push(new Employee("John L. Gettel", "black", "#00FFFF", 24, 32.61, new Date("2016-12-26"), new Date("2017-08-04")));
+    tiles.push(new Employee("Ken T", "grey", "black", 24, 305.68, new Date("2017-07-21"), new Date("2017-08-04")));
+    tiles.push(new Employee("Kevin Chaney", "Turquoise", "black", 17, -63.9, new Date("2016-12-26"), new Date("2017-08-04")));
+    tiles.push(new Employee("Michelle", "pink", "gray", 24, 81.2400, new Date("2017-07-07"), new Date("2017-08-04")));
+    tiles.push(new Employee("Mike Legg", "red", "white", 24, 239.57, new Date("2017-07-05"), new Date("2017-08-04")));
+    tiles.push(new Employee("Ryan Mathewson", "black", nyan, 19, 184.95, new Date("2016-12-26"), new Date("2017-08-04")));
+    tiles.push(new Employee("Scott Lawless", "#92278F", "#FFFFFF", 24, 403.0300, new Date("2017-07-28"), new Date("2017-08-04")));
+    tiles.push(new Employee("Taylor Osmonson", "black", "orange", 19, 16.79, new Date("2017-07-16"), new Date("2017-08-04")));
+
+    tiles.push(new Employee("Co-ops", "black", "white", 0, 0, new Date("2017-06-23"), new Date("2017-08-04")));
 
     var sitesToRotate = ["https://systemssupport.leidos.com/",
-                         "https://systemssupport.leidos.com/CalendarPage.aspx"];
+      "https://systemssupport.leidos.com/CalendarPage.aspx"];
 
     // working variables
     var leftEdge = 0;
@@ -91,9 +96,9 @@
       canvas.width = window.innerWidth;
       canvas.height = tileHeight;
 
-      if(now - lastSiteRotation > 1000 * 60){
+      if (now - lastSiteRotation > 1000 * 60) {
         siteRotationIndex++;
-        if(siteRotationIndex >= sitesToRotate.length)
+        if (siteRotationIndex >= sitesToRotate.length)
           siteRotationIndex = 0;
         lastSiteRotation = now;
         iframe.src = sitesToRotate[siteRotationIndex];
@@ -146,52 +151,64 @@
     requestAnimationFrame(Draw);
 
 
-    function Employee(name, background, foreground, rate, pto, startdate) {
+    function Employee(name, background, foreground, rate, pto, startdate, lastupdate) {
       this.name = name;
       this.background = background;
       this.foreground = foreground;
       this.rate = rate;
       this.pto = pto;
       this.startdate = startdate;
+      this.lastupdate = lastupdate;
 
-      this.currentPTOHours = function(){
+
+      this.currentPTOHours = function () {
+        // Expire outdated people (30 days)
+        if (new Date() > this.lastupdate.addDays(30))
+          this.rate = 0;
+
         var yearsSinceStart = ((Date.now() - this.startdate) / 1000.0 / 60.0 / 60.0 / 24.0 / 365.0);
         return this.pto + (yearsSinceStart * this.rate * 8);
       }
 
-      this.getBackgroundColor = function(){
+      this.getBackgroundColor = function () {
         if (typeof background === "function")
           return background();
         else
           return background;
       }
 
-      this.getForegroundColor = function(){
+      this.getForegroundColor = function () {
         if (typeof foreground === "function")
           return foreground();
         else
           return foreground;
       }
 
- 
+
     }
 
-    function RGB2Color(r,g,b) {
+    function RGB2Color(r, g, b) {
       return '#' + byte2Hex(r) + byte2Hex(g) + byte2Hex(b);
     }
 
-    function byte2Hex(n){
+    function byte2Hex(n) {
       var nybHexString = "0123456789ABCDEF";
-      return String(nybHexString.substr((n >> 4) & 0x0F,1)) + nybHexString.substr(n & 0x0F,1);
+      return String(nybHexString.substr((n >> 4) & 0x0F, 1)) + nybHexString.substr(n & 0x0F, 1);
     }
 
-    function nyan(){
+    function nyan() {
       var now = new Date();
       var frequency = 0.001;
-      red   = Math.sin(frequency*now + 0) * 127 + 128;
-      green = Math.sin(frequency*now + 2) * 127 + 128;
-      blue  = Math.sin(frequency*now + 4) * 127 + 128;
-      return RGB2Color(red,green,blue);
+      red = Math.sin(frequency * now + 0) * 127 + 128;
+      green = Math.sin(frequency * now + 2) * 127 + 128;
+      blue = Math.sin(frequency * now + 4) * 127 + 128;
+      return RGB2Color(red, green, blue);
+    }
+
+    Date.prototype.addDays = function (days) {
+      var dat = new Date(this.valueOf());
+      dat.setDate(dat.getDate() + days);
+      return dat;
     }
 
 
