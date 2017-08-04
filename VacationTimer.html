@@ -41,20 +41,20 @@
     var textMargin = 5;
     var tiles = [];
 
-    tiles.push(new Employee("Andrew Hoyt",    "black",    "white",    96.82,    new Date("2017-07-02"), 19));
-    tiles.push(new Employee("Andy Knapp",     "black",    "green",    284.13,   new Date("2017-07-02"), 24));
-    tiles.push(new Employee("Chris Mikola",   "#8E44AD",  "white",    115.74,   new Date("2017-07-03"), 24));
-    tiles.push(new Employee("Derek Lauer",    "#808080",  "green",    43.86,    new Date("2017-06-20"), 16));
-    tiles.push(new Employee("Jason Farlow",   "black",    "green",    65.74,    new Date("2017-06-18"), 19));
-    tiles.push(new Employee("Jason Hotra",    "#18453B",  "white",    231.0700, new Date("2017-07-02"), 24));
-    tiles.push(new Employee("John Gettel",    "black",    "#FF00FF",  143.93,   new Date("2017-07-02"), 24));
-    tiles.push(new Employee("Ken T",          "grey",     "black",    305.68,   new Date("2017-07-21"), 24));
-    tiles.push(new Employee("Kevin Chaney",   "Turquoise","black",    9.32,     new Date("2017-07-14"), 17));
-    tiles.push(new Employee("Michelle",       "pink",     "gray",     81.2400,  new Date("2017-07-07"), 24));
-    tiles.push(new Employee("Mike Legg",      "red",      "white",    239.57,   new Date("2017-07-05"), 24));
-    tiles.push(new Employee("Ryan Mathewson", "black",    "#FFCD00",  275.7   , new Date("2017-07-21"), 19));
-    tiles.push(new Employee("Scott Lawless",  "#92278F",  "#FFFFFF",  403.0300, new Date("2017-07-28"), 24));
-    tiles.push(new Employee("Taylor Osmonson","black",    "orange",   16.79,    new Date("2017-07-16"), 19));
+    tiles.push(new Employee("Andrew Hoyt",    "black",    "white",    19, 96.82,    new Date("2017-07-02")));
+    tiles.push(new Employee("Andy Knapp",     "black",    "green",    24, 284.13,   new Date("2017-07-02")));
+    tiles.push(new Employee("Chris Mikola",   "#8E44AD",  "white",    24, 115.74,   new Date("2017-07-03")));
+    tiles.push(new Employee("Derek Lauer",    "gray",     "blue",     16, -56.1,    new Date("2016-12-26")));
+    tiles.push(new Employee("Jason Farlow",   "black",    "green",    19, 65.74,    new Date("2017-06-18")));
+    tiles.push(new Employee("Jason Hotra",    "#18453B",  "white",    24, 231.0700, new Date("2017-07-02")));
+    tiles.push(new Employee("John Gettel",    "black",    "#FF00FF",  24, 143.93,   new Date("2017-07-02")));
+    tiles.push(new Employee("Ken T",          "grey",     "black",    24, 305.68,   new Date("2017-07-21")));
+    tiles.push(new Employee("Kevin Chaney",   "Turquoise","black",    17, 9.32,     new Date("2017-07-14")));
+    tiles.push(new Employee("Michelle",       "pink",     "gray",     24, 81.2400,  new Date("2017-07-07")));
+    tiles.push(new Employee("Mike Legg",      "red",      "white",    24, 239.57,   new Date("2017-07-05")));
+    tiles.push(new Employee("Ryan Mathewson", "black",    "#FFCD00",  19, 275.7   , new Date("2017-07-21")));
+    tiles.push(new Employee("Scott Lawless",  "#92278F",  "#FFFFFF",  24, 403.0300, new Date("2017-07-28")));
+    tiles.push(new Employee("Taylor Osmonson","black",    "orange",   19, 16.79,    new Date("2017-07-16")));
     
     tiles.push(new Employee("Co-ops",         "black",    "white",    0,        new Date("2017-06-23"),  0));
 
@@ -150,13 +150,13 @@
     requestAnimationFrame(Draw);
 
 
-    function Employee(name, background, foreground, pto, startdate, rate) {
+    function Employee(name, background, foreground, rate, pto, startdate) {
       this.name = name;
       this.background = background;
       this.foreground = foreground;
+      this.rate = rate;
       this.pto = pto;
       this.startdate = startdate;
-      this.rate = rate;
     }
 
   </script>
