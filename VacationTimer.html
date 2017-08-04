@@ -56,7 +56,7 @@
     tiles.push(new Employee("Scott Lawless",  "#92278F",  "#FFFFFF",  24, 403.0300, new Date("2017-07-28")));
     tiles.push(new Employee("Taylor Osmonson","black",    "orange",   19, 16.79,    new Date("2017-07-16")));
     
-    tiles.push(new Employee("Co-ops",         "black",    "white",    0,        new Date("2017-06-23"),  0));
+    tiles.push(new Employee("Co-ops",         "black",    "white",     0, 0,        new Date("2017-06-23")));
 
     var sitesToRotate = ["https://systemssupport.leidos.com/",
                          "https://systemssupport.leidos.com/CalendarPage.aspx"];
@@ -108,7 +108,7 @@
       }
       leftMostTileIndex = leftMostTileIndex % tiles.length
 
-      tiles.sort(function (a, b) { return b.pto - a.pto; });
+      tiles.sort(function (a, b) { return b.currentPTOHours() - a.currentPTOHours(); });
 
       // Draw
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -125,7 +125,7 @@
         ctx.fillStyle = tile.foreground;
         ctx.fillText(tile.name, x + textMargin, 80);
         var yearsSinceStart = ((Date.now() - tile.startdate) / 1000.0 / 60.0 / 60.0 / 24.0 / 365.0);
-        var hours = tile.pto + (yearsSinceStart * tile.rate);
+        var hours = tile.currentPTOHours();
         var minutes = (hours % 1) * 60.0;
         var seconds = (minutes % 1) * 60.0;
         var milliseconds = (seconds % 1) * 1000;
@@ -157,6 +157,11 @@
       this.rate = rate;
       this.pto = pto;
       this.startdate = startdate;
+
+      this.currentPTOHours = function(){
+        var yearsSinceStart = ((Date.now() - this.startdate) / 1000.0 / 60.0 / 60.0 / 24.0 / 365.0);
+        return this.pto + (yearsSinceStart * this.rate * 8);
+      }
     }
 
   </script>
