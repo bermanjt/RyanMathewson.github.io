@@ -43,7 +43,6 @@
 
 
 
-
     // settings
     var scrollSpeed = 0.2; // px per ms
     var tileWidth = 800;
@@ -148,7 +147,6 @@
         i++;
       }
 
-
       lastDrawTime = Date.now();
       requestAnimationFrame(Draw);
     }
@@ -156,7 +154,7 @@
     requestAnimationFrame(Draw);
 
 
-    function Employee(name, background, foreground, rate, pto, startdate, lastupdate) {
+    function Employee(name, background, foreground, rate, pto, startdate, lastupdate, hiredate) {
       this.name = name;
       this.background = background;
       this.foreground = foreground;
@@ -164,6 +162,7 @@
       this.pto = pto;
       this.startdate = startdate;
       this.lastupdate = lastupdate;
+      this.hiredate = startdate;
 
       this.currentPTOHours = function () {
         // Expire outdated people (30 days)
@@ -172,6 +171,16 @@
 
         var yearsSinceStart = ((Date.now() - this.startdate) / 1000.0 / 60.0 / 60.0 / 24.0 / 365.0);
         return this.pto + (yearsSinceStart * this.rate * 8);
+      }
+
+      this.getAccrualRates = function (){
+        var start = new Date(this.hiredate);
+        return [
+          {"startdate": new Date(start), "ptoDaysPerYear": 16},
+          {"startdate": new Date(start.setFullYear(start.getFullYear() + 2)), "ptoDaysPerYear": 17},
+          {"startdate": new Date(start.setFullYear(start.getFullYear() + 2)), "ptoDaysPerYear": 19},
+          {"startdate": new Date(start.setFullYear(start.getFullYear() + 5)), "ptoDaysPerYear": 24},
+        ];
       }
 
       this.getBackgroundColor = function () {
