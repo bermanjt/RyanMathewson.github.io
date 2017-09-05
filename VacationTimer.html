@@ -50,22 +50,22 @@
     var textMargin = 5;
     var tiles = [];
 
-    tiles.push(new Employee("Andrew Hoyt", "#333f4f", "#ffff00", 19, 11.92, new Date("2016-12-26"), new Date("2017-08-04")));
+    tiles.push(new Employee("Andrew Hoyt", "#333f4f", "#ffff00", 19, 11.92, new Date("2016-12-26"), new Date("2017-09-01")));
     tiles.push(new Employee("Andy Knapp", "black", "green", 24, 294.89, new Date("2017-08-21"), new Date("2017-08-21")));
-    tiles.push(new Employee("Chris Mikola", "#8E44AD", "white", 24, -13.96, new Date("2016-12-26"), new Date("2017-08-04")));
-    tiles.push(new Employee("Derek Lauer", "gray", "blue", 16, -56.1, new Date("2016-12-26"), new Date("2017-08-04")));
+    tiles.push(new Employee("Chris Mikola", "#8E44AD", "white", 24, -13.96, new Date("2016-12-26"), new Date("2017-08-01")));
+    tiles.push(new Employee("Derek Lauer", "gray", "blue", 16, -56.1, new Date("2016-12-26"), new Date("2017-08-01")));
     tiles.push(new Employee("Jason Farlow", "black", "green", 19, -60.31, new Date("2016-12-26"), new Date("2017-08-07")));
     tiles.push(new Employee("Jason Hotra", "#016533", "white", 24, 87.75, new Date("2016-12-26"), new Date("2017-08-14")));
-    tiles.push(new Employee("John L. Gettel", "black", "#00FFFF", 24, 29.11, new Date("2016-12-26"), new Date("2017-08-04")));
-    tiles.push(new Employee("Ken T", "grey", "black", 24, 305.68, new Date("2017-07-21"), new Date("2017-08-04")));
+    tiles.push(new Employee("John L. Gettel", "black", "#00FFFF", 24, 29.11, new Date("2016-12-26"), new Date("2017-09-01")));
+    tiles.push(new Employee("Ken T", "grey", "black", 24, 305.68, new Date("2017-07-21"), new Date("2017-08-01")));
     tiles.push(new Employee("Kevin Chaney", "Turquoise", "black", 17, -63.9, new Date("2016-12-26"), new Date("2017-08-04")));
-    tiles.push(new Employee("Michelle", "pink", "gray", 24, 81.2400, new Date("2017-07-07"), new Date("2017-08-04")));
-    tiles.push(new Employee("Mike Legg", "red", "white", 24, 239.57, new Date("2017-07-05"), new Date("2017-08-04")));
-    tiles.push(new Employee("Ryan Mathewson", "black", nyan, 19, 171.45, new Date("2016-12-26"), new Date("2017-08-21")));
-    tiles.push(new Employee("Scott Lawless", "#92278F", "#FFFFFF", 24, 403.0300, new Date("2017-07-28"), new Date("2017-08-04")));
-    tiles.push(new Employee("Taylor Osmonson", "black", "orange", 19, 16.79, new Date("2017-07-16"), new Date("2017-08-04")));
+    tiles.push(new Employee("Michelle", "pink", "gray", 24, 81.2400, new Date("2017-07-07"), new Date("2017-08-01")));
+    tiles.push(new Employee("Mike Legg", "red", "white", 24, 239.57, new Date("2017-07-05"), new Date("2017-08-01")));
+    tiles.push(new Employee("Ryan Mathewson", "black", nyan, 19, 171.45, new Date("2016-12-26"), new Date("2017-09-01")));
+    tiles.push(new Employee("Scott Lawless", "#92278F", "#FFFFFF", 24, 403.0300, new Date("2017-07-28"), new Date("2017-08-01")));
+    tiles.push(new Employee("Taylor Osmonson", "black", "orange", 19, 16.79, new Date("2017-07-16"), new Date("2017-08-01")));
 
-    tiles.push(new Employee("Co-ops", "black", "white", 0, 0, new Date("2017-06-23"), new Date("2017-08-04")));
+    tiles.push(new Employee("Co-ops", "black", "white", 0, 0, new Date("2017-06-23"), new Date("2020-08-04")));
 
     var sitesToRotate = ["https://www.windy.com/?radar,42.074,-83.480,8,m:eP2adP0",
                          "https://systemssupport.leidos.com/",
@@ -135,12 +135,18 @@
         ctx.font = "90px Arial";
         ctx.fillStyle = tile.getForegroundColor();
         ctx.fillText(tile.name, x + textMargin, 80);
-        var yearsSinceStart = ((Date.now() - tile.startdate) / 1000.0 / 60.0 / 60.0 / 24.0 / 365.0);
-        var hours = tile.currentPTOHours();
-        var minutes = (hours % 1) * 60.0;
-        var seconds = (minutes % 1) * 60.0;
-        var milliseconds = (seconds % 1) * 1000;
-        ctx.fillText(Math.floor(hours) + ":" + ("00" + Math.floor(minutes)).substr(-2, 2) + ":" + ("00" + Math.floor(seconds)).substr(-2, 2) + "." + ("000" + Math.floor(milliseconds)).substr(-3, 3), x + textMargin, 180);
+
+        // Expire outdated people (30 days)
+        var ptoText = "Expired";
+        if (new Date() <= tile.lastupdate.addDays(30)) {
+          var yearsSinceStart = ((Date.now() - tile.startdate) / 1000.0 / 60.0 / 60.0 / 24.0 / 365.0);
+          var hours = tile.currentPTOHours();
+          var minutes = (hours % 1) * 60.0;
+          var seconds = (minutes % 1) * 60.0;
+          var milliseconds = (seconds % 1) * 1000;
+          ptoText = Math.floor(hours) + ":" + ("00" + Math.floor(minutes)).substr(-2, 2) + ":" + ("00" + Math.floor(seconds)).substr(-2, 2) + "." + ("000" + Math.floor(milliseconds)).substr(-3, 3);
+        }
+        ctx.fillText(ptoText, x + textMargin, 180);
 
 
         x += tileWidth;
@@ -165,10 +171,6 @@
       this.hiredate = startdate;
 
       this.currentPTOHours = function () {
-        // Expire outdated people (30 days)
-        if (new Date() > this.lastupdate.addDays(30))
-          this.rate = 0;
-
         var yearsSinceStart = ((Date.now() - this.startdate) / 1000.0 / 60.0 / 60.0 / 24.0 / 365.0);
         return this.pto + (yearsSinceStart * this.rate * 8);
       }
