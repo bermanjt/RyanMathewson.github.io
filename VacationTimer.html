@@ -138,7 +138,7 @@
 
         // Expire outdated people (30 days)
         var ptoText = "Expired";
-        if (new Date() <= tile.lastupdate.addDays(30)) {
+        if (!tile.isExpired()) {
           var yearsSinceStart = ((Date.now() - tile.startdate) / 1000.0 / 60.0 / 60.0 / 24.0 / 365.0);
           var hours = tile.currentPTOHours();
           var minutes = (hours % 1) * 60.0;
@@ -169,6 +169,10 @@
       this.startdate = startdate;
       this.lastupdate = lastupdate;
       this.hiredate = startdate;
+
+      this.isExpired = function() {
+        return new Date() > this.lastupdate.addDays(30)
+      }
 
       this.currentPTOHours = function () {
         var yearsSinceStart = ((Date.now() - this.startdate) / 1000.0 / 60.0 / 60.0 / 24.0 / 365.0);
