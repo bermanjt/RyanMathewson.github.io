@@ -149,7 +149,6 @@
         }
         ctx.fillText(ptoText, x + textMargin, 180);
 
-
         x += tileWidth;
         i++;
       }
@@ -165,19 +164,31 @@
       this.name = name;
       this.background = background;
       this.foreground = foreground;
-      this.rate = rate;
+      //this.rate = rate;
       this.pto = pto;
       this.startdate = startdate;
       this.lastupdate = lastupdate;
-      this.hiredate = startdate;
+
+      // TODO get actual hire dates
+      if(rate == 16)
+        this.hiredate = new Date().setFullYear(2016);
+      else if (rate == 17)
+        this.hiredate = new Date().setFullYear(2015);
+      else if (rate == 19)
+        this.hiredate = new Date().setFullYear(2011);
+      else
+        this.hiredate = new Date().setFullYear(2000);
 
       this.isExpired = function() {
         return new Date() > this.lastupdate.addDays(30)
       }
 
       this.currentPTOHours = function () {
+        if(this.name == 'Co-ops')
+          return 0;
+
         var yearsSinceStart = ((Date.now() - this.startdate) / 1000.0 / 60.0 / 60.0 / 24.0 / 365.0);
-        return this.pto + (yearsSinceStart * this.rate * 8);
+        return this.pto + (yearsSinceStart * this.currentAccrualRate() * 8);
       }
 
       this.getAccrualRates = function (){
@@ -188,6 +199,16 @@
           {"startdate": new Date(start.setFullYear(start.getFullYear() + 2)), "ptoDaysPerYear": 19},
           {"startdate": new Date(start.setFullYear(start.getFullYear() + 5)), "ptoDaysPerYear": 24},
         ];
+      }
+
+      this.currentAccrualRate = function(){
+        var now = new Date();
+        var rates = this.getAccrualRates();
+        for(var i = 1; i < rates.length; i++){
+          if(rates[i].startdate > now)
+            return rates[i-1].ptoDaysPerYear;
+        }
+        return rates[rates.length - 1].ptoDaysPerYear;
       }
 
       this.getBackgroundColor = function () {
