@@ -50,20 +50,20 @@
     var textMargin = 5;
     var tiles = [];
 
-    tiles.push(new Employee("Andrew Hoyt", "#333f4f", "#ffff00", 19, 11.92, new Date("2016-12-26"), new Date("2017-09-01")));
-    tiles.push(new Employee("Andy Knapp", "black", "green", 24, 294.89, new Date("2017-08-21"), new Date("2017-08-21")));
-    tiles.push(new Employee("Chris Mikola", "#8E44AD", "white", 24, -13.96, new Date("2016-12-26"), new Date("2017-09-06")));
-    tiles.push(new Employee("Derek Lauer", "gray", "blue", 16, -56.1, new Date("2016-12-26"), new Date("2017-09-05")));
-    tiles.push(new Employee("Jason Farlow", "black", "green", 19, -60.31, new Date("2016-12-26"), new Date("2017-08-07")));
-    tiles.push(new Employee("Jason Hotra", "#016533", "white", 24, 55.75, new Date("2016-12-26"), new Date("2017-09-06")));
-    tiles.push(new Employee("John L. Gettel", "black", "#00FFFF", 24, 29.11, new Date("2016-12-26"), new Date("2017-09-01")));
-    tiles.push(new Employee("Ken T", "grey", "black", 24, 305.68, new Date("2017-07-21"), new Date("2017-08-01")));
-    tiles.push(new Employee("Kevin Chaney", "Turquoise", "black", 17, -63.9, new Date("2016-12-26"), new Date("2017-09-05")));
-    tiles.push(new Employee("Michelle", "pink", "gray", 24, 81.2400, new Date("2017-07-07"), new Date("2017-08-01")));
-    tiles.push(new Employee("Mike Legg", "red", "white", 24, 239.57, new Date("2017-07-05"), new Date("2017-08-01")));
-    tiles.push(new Employee("Ryan Mathewson", "black", nyan, 19, 171.45, new Date("2016-12-26"), new Date("2017-09-01")));
-    tiles.push(new Employee("Scott Lawless", "#92278F", "#FFFFFF", 24, 403.0300, new Date("2017-07-28"), new Date("2017-08-01")));
-    tiles.push(new Employee("Taylor Osmonson", "black", "orange", 19, -47.4, new Date("2016-12-26"), new Date("2017-09-08")));
+    tiles.push(new Employee("Andrew Hoyt", "#333f4f", "#ffff00", 19, 11.92, new Date("2016-12-26"), new Date("2017-09-01"), null));
+    tiles.push(new Employee("Andy Knapp", "black", "green", 24, 294.89, new Date("2017-08-21"), new Date("2017-08-21"), new Date('2007-08-01')));
+    tiles.push(new Employee("Chris Mikola", "#8E44AD", "white", 24, -13.96, new Date("2016-12-26"), new Date("2017-09-06"), null));
+    tiles.push(new Employee("Derek Lauer", "gray", "blue", 16, -56.1, new Date("2016-12-26"), new Date("2017-09-05"), null));
+    tiles.push(new Employee("Jason Farlow", "black", "green", 19, -60.31, new Date("2016-12-26"), new Date("2017-08-07"), null));
+    tiles.push(new Employee("Jason Hotra", "#016533", "white", 24, 55.75, new Date("2016-12-26"), new Date("2017-09-06"), null));
+    tiles.push(new Employee("John L. Gettel", "black", "#00FFFF", 24, 29.11, new Date("2016-12-26"), new Date("2017-09-01"), null));
+    tiles.push(new Employee("Ken T", "grey", "black", 24, 305.68, new Date("2017-07-21"), new Date("2017-08-01"), null));
+    tiles.push(new Employee("Kevin Chaney", "Turquoise", "black", 17, -63.9, new Date("2016-12-26"), new Date("2017-09-05"), new Date('2014-07-07')));
+    tiles.push(new Employee("Michelle", "pink", "gray", 24, 81.2400, new Date("2017-07-07"), new Date("2017-08-01"), null));
+    tiles.push(new Employee("Mike Legg", "red", "white", 24, 239.57, new Date("2017-07-05"), new Date("2017-08-01"), null));
+    tiles.push(new Employee("Ryan Mathewson", "black", nyan, 19, 171.45, new Date("2016-12-26"), new Date("2017-09-01"), new Date('2008-06-02')));
+    tiles.push(new Employee("Scott Lawless", "#92278F", "#FFFFFF", 24, 403.0300, new Date("2017-07-28"), new Date("2017-08-01"), null));
+    tiles.push(new Employee("Taylor Osmonson", "black", "orange", 19, -75.9, new Date("2016-12-26"), new Date("2017-09-08"), new Date('2013-07-01')));
 
     tiles.push(new Employee("Co-ops", "black", "white", 0, 0, new Date("2017-06-23"), new Date("2020-08-04")));
 
@@ -169,15 +169,18 @@
       this.startdate = startdate;
       this.lastupdate = lastupdate;
 
-      // TODO get actual hire dates
-      if(rate == 16)
-        this.hiredate = new Date().setFullYear(2016);
-      else if (rate == 17)
-        this.hiredate = new Date().setFullYear(2015);
-      else if (rate == 19)
-        this.hiredate = new Date().setFullYear(2011);
-      else
-        this.hiredate = new Date().setFullYear(2000);
+      this.hiredate = hiredate;
+      if(hiredate == null){
+        // Guess
+        if(rate == 16)
+          this.hiredate = new Date().setFullYear(2016);
+        else if (rate == 17)
+          this.hiredate = new Date().setFullYear(2015);
+        else if (rate == 19)
+          this.hiredate = new Date().setFullYear(2011);
+        else
+          this.hiredate = new Date().setFullYear(2000);
+      }
 
       this.isExpired = function() {
         return new Date() > this.lastupdate.addDays(30)
@@ -186,6 +189,29 @@
       this.currentPTOHours = function () {
         if(this.name == 'Co-ops')
           return 0;
+       
+        // Check if they had a rate change
+        var rates = this.getAccrualRates();
+        var now = new Date();
+        for(var i = 1; i < rates.length; i++){
+          var rate = rates[i];
+          var previousRate = rates[i-1];
+          if(rate.startdate > this.startdate && rate.startdate < now){
+            // this person had a rate change
+            var ptoAccum = this.pto;
+            var yearsAtPreviousRate = ((rate.startdate - this.startdate) / 1000.0 / 60.0 / 60.0 / 24.0 / 365.0)
+            ptoAccum += (yearsAtPreviousRate * previousRate.ptoDaysPerYear * 8);
+
+            var yearsAtCurrentRate = ((Date.now() - rate.startdate) / 1000.0 / 60.0 / 60.0 / 24.0 / 365.0);
+            ptoAccum += (yearsAtCurrentRate * rate.ptoDaysPerYear * 8);
+
+            return ptoAccum;
+          }
+        }
+
+
+
+        // Old Way
 
         var yearsSinceStart = ((Date.now() - this.startdate) / 1000.0 / 60.0 / 60.0 / 24.0 / 365.0);
         return this.pto + (yearsSinceStart * this.currentAccrualRate() * 8);
@@ -197,7 +223,7 @@
           {"startdate": new Date(start), "ptoDaysPerYear": 16},
           {"startdate": new Date(start.setFullYear(start.getFullYear() + 2)), "ptoDaysPerYear": 17},
           {"startdate": new Date(start.setFullYear(start.getFullYear() + 2)), "ptoDaysPerYear": 19},
-          {"startdate": new Date(start.setFullYear(start.getFullYear() + 5)), "ptoDaysPerYear": 24},
+          {"startdate": new Date(start.setFullYear(start.getFullYear() + 6)), "ptoDaysPerYear": 24},
         ];
       }
 
