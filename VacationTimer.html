@@ -89,9 +89,12 @@
     var ctx = canvas.getContext("2d");
 
     // iFrame setup
-    var iframe = document.createElement('iframe');
-    document.body.appendChild(iframe);
-    iframe.src = sitesToRotate[siteRotationIndex];
+    console.log(window.location.href);
+    if(!window.location.href.endsWith("noiframe")){
+      var iframe = document.createElement('iframe');
+      document.body.appendChild(iframe);
+      iframe.src = sitesToRotate[siteRotationIndex];
+    }
 
     function Draw() {
 
@@ -100,7 +103,7 @@
       canvas.width = window.innerWidth;
       canvas.height = tileHeight;
 
-      if (now - lastSiteRotation > 1000 * 60) {
+      if (iframe && now - lastSiteRotation > 1000 * 60) {
         siteRotationIndex++;
         if (siteRotationIndex >= sitesToRotate.length)
           siteRotationIndex = 0;
