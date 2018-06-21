@@ -169,6 +169,25 @@
       this.pto = pto;
       this.startdate = startdate;
       this.lastupdate = lastupdate;
+      //gets month and day out of hiredate
+      var month = hiredate.getMonth();
+      var day = hiredate.getDay();
+      //gets current month and day
+      var currentDay = getUTCDay();
+      var currentMonth = getUTCMonth();
+      //does the calculations
+      var monthAway = month - currentMonth;
+      var dayAway = day - currentDay;
+      if(monthAway < 0){
+        monthAway = -(monthAway);
+        monthAway = 12-monthAway;
+      }
+      if(dayAway < 0){
+        dayAway = -(dayAway)
+        dayAway = 365 - dayAway;
+      }
+      var minutesAway = 1440 - getUTCMinutes();
+      var secondsAway = 86400 - getUTCSeconds();
 
       this.hiredate = hiredate;
       if(hiredate == null){
